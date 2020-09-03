@@ -1,0 +1,30 @@
+class Solution {
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        TreeMap<Integer, Integer> tmap = new TreeMap<>();
+        Map.Entry<Integer, Integer> e;
+
+        for (int i=0;i<nums.length;i++) {
+			/* Get the number greater than current */
+            e = tmap.ceilingEntry(nums[i]);
+            while (e != null) {
+                if (Math.abs((long)e.getKey() - (long)nums[i]) > t) // loop exit condition
+                    break;
+                if (Math.abs(i - e.getValue()) <= k)
+                    return true;
+                e = tmap.ceilingEntry(e.getKey()+1); // Next greater number
+            }
+			
+			/* Get the number less than current */
+            e = tmap.floorEntry(nums[i]);
+            while (e != null) {
+                if (Math.abs((long)e.getKey() - (long)nums[i]) > t) // loop exit condition
+                    break;
+                if (Math.abs(i - e.getValue()) <= k)
+                    return true;
+                e = tmap.floorEntry(e.getKey()-1); // Next lower number
+            }
+            tmap.put(nums[i], i);
+        }
+        return false;
+    }
+}
